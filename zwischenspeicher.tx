@@ -1,0 +1,323 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <conio.h>
+#include <time.h>
+#include <string.h>
+
+#define ECKEUNTENLINKS      '\xC0'
+#define ECKEUNTENRECHTS     '\xD9'
+#define GERADERSTRICH       '\xC4'
+
+//  W = 119 & 87
+//  A = 97 & 65
+//  S = 115
+//  D = 100
+
+void delay(int number_of_seconds)
+{
+    // Converting time into milli_seconds
+    int milli_seconds = 1000 * number_of_seconds;
+
+    // Storing start time
+    clock_t start_time = clock();
+
+    // looping till required time is not achieved
+    while (clock() < start_time + milli_seconds)
+        ;
+}
+
+void SETFELD(int x, int y){
+
+    //Erstellung des Feldes
+    char Feld[y][x];
+
+
+    //initialisierung des Feldes
+    for (int i = 0; i < y; ++i) {
+        for (int j = 0; j < x; ++j) {
+            Feld[i][j] = '.';
+        }
+    }
+
+
+
+
+
+
+    Feld[24][0] = ECKEUNTENLINKS;
+    Feld[24][98] = ECKEUNTENRECHTS;
+    for (int i = 1; i <= x-2; ++i) {
+        Feld[24][i] = GERADERSTRICH;
+    }
+
+
+    //printf("%c", Feld[20][50]);
+
+
+
+    //Ausgabe des Feldes
+    for (int i = 0; i < y; ++i) {
+        for (int j = 0; j < x; ++j) {
+            printf("%c", Feld[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main(){
+
+/*
+    for (int i = 0; i < 5; i++) {
+        int y = 25;
+        y += i;
+        SETFELD(99, y);
+        getch();
+        system("cls");
+        delay(2);
+    }
+*/
+    int  input,
+            n=5,
+            m=10,
+            object_x = 1,
+            object_y = 1;
+
+    char spielfeld[5][5];
+
+
+
+
+
+    printf("\n");
+    //initialisierung des Feldes
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            spielfeld[i][j] = '.';
+        }
+    }
+
+    while (1) {
+        // Setze das Spielfeld zurück
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                spielfeld[i][j] = '.';
+            }
+        }
+
+        spielfeld[object_x][object_y] = 'X';
+
+        // Ausgabe des Spielfelds
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                printf("%c", spielfeld[i][j]);
+            }
+            printf("\n");
+        }
+
+        // Benutzereingabe
+        input = getchar();
+
+        // Bewegungslogik
+        switch (input) {
+            case 'w':
+                object_x = (object_x - 1 + n) % n;  // Bewegung nach oben
+                break;
+            case 's':
+                object_x = (object_x + 1) % n;  // Bewegung nach unten
+                break;
+            case 'a':
+                object_y = (object_y - 1 + m) % m;  // Bewegung nach links
+                break;
+            case 'd':
+                object_y = (object_y + 1) % m;  // Bewegung nach rechts
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    return 0;
+}
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////
+
+
+/*
+    Subway Surfers Spiel
+
+    Nico Häfele 
+    Tizian Müller
+
+
+    Open Source
+
+*/
+
+
+
+
+#include <stdio.h>
+#include <conio.h>
+#include <windows.h>
+
+
+
+
+
+#define ECKE_OBEN_LINKS     '\xDA'
+#define ECKE_OBEN_RECHTS    '\xBF'
+
+#define ECKE_UNTEN_LINKS    '\xC0'
+#define ECKE_UNTEN_RECHTS   '\xD9'
+#define GERADERSTRICH       '\xC4'
+
+
+
+void game() {
+    int n = 25, m = 50, object_x = 1, object_y = 1;
+
+    //erstelle spielfeld
+    char spielfeld[25][50];
+
+
+    //initialisiere input
+    char input = ' ';
+
+
+
+    printf("\n");
+
+    // Hauptspiel-Schleife
+
+
+    while (input != '\x1B') {
+
+
+        // Initialisierung des Feldes
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                spielfeld[i][j] = '.';
+            }
+        }
+
+        // Lösche den Bildschirm
+        system("cls");
+
+
+        //Setze spieler
+        spielfeld[object_x][object_y] = 'O';
+
+
+
+
+        // Ausgabe des Spielfelds
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                printf("%c", spielfeld[i][j]);
+            }
+            printf("\n");
+        }
+
+
+
+
+        // Direkte Benutzereingabe
+        if (_kbhit()) {
+            input = _getch();
+
+            // Bewegungslogik
+            switch (input) {
+            case 'w':
+                object_x = (object_x - 1 + n) % n;  // Bewegung nach oben
+                break;
+            case 'a':
+                object_y = (object_y - 1 + m) % m;  // Bewegung nach links
+                break;
+            case 'd':
+                object_y = (object_y + 1) % m;  // Bewegung nach rechts
+                break;
+            default:
+                break;
+            }
+        }
+        //Warte 10 mS
+        Sleep(10);
+    }
+}
+
+
+void object(int hoehe, int breite) {
+
+
+    //Erstellung des Feldes
+    char Feld[10][10];
+
+
+    //initialisierung des Feldes
+    for (int i = 0; i < hoehe; ++i) {
+        for (int j = 0; j < breite; ++j) {
+            Feld[i][j] = 'x';
+        }
+    }
+
+
+    //Oberste Zeile
+    Feld[0][0] = ECKE_OBEN_LINKS;
+    for (int i = 1; i <= breite - 2; ++i) {
+        Feld[0][i] = GERADERSTRICH;
+    }
+    Feld[0][breite - 1] = ECKE_OBEN_RECHTS;
+
+
+    printf("\n");
+
+    for (int j = 0; j < hoehe-2; j++) {
+
+
+        Feld[j+1][0] = '\xB3';
+        for (int i = 0; i < breite - 2; i++) {
+            Feld[j+1][i+1] = 'X';
+        }
+        Feld[j+1][breite-1] = '\xB3';
+        printf("\n");
+    }
+    printf("\n");
+
+
+
+    //Untersete Zeile
+    Feld[hoehe - 1][0] = ECKE_UNTEN_LINKS;
+    for (int i = 1; i <= breite - 2; ++i) {
+        Feld[hoehe-1][i] = GERADERSTRICH;
+    }
+    Feld[hoehe - 1][breite - 1] = ECKE_UNTEN_RECHTS;
+
+
+    //printf("%c", Feld[20][50]);
+
+
+
+    //Ausgabe des Feldes
+    for (int i = 0; i < hoehe; ++i) {
+        for (int j = 0; j < breite; ++j) {
+            printf("%c", Feld[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+
+
+
+int main() {
+    game();
+    object(10, 10);
+
+    return 0;
+}
